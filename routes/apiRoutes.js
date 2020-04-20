@@ -1,34 +1,29 @@
 const fs = require('fs');
+var dbJson = "./db/db.json";
+var Notes = require('./dbRoutes')
 
-var path = "./db/db.json";
+module.exports = (app) => {
 
-class JsonDb {
-    constructor (path, note) {
-        this.path = path;
-        this.note = note;
-    }
-}
-
-var jsonDb = new JsonDb();
-
-module.exports = function(app) {
-
-app.get('/api/notes', function(req, res){
-    res.json(fs.readFileSync(path));
+app.get('/api/notes', (req, res) => {
+    fs.readFile(dbJson, 'utf8', (err, data) => {
+        if (err) {
+            throw err;
+        }
+        var notes = JSON.parse(data).map;
+        res.json(notes);
+});
 });
 
-// app.get('/api/notes/:id', function(req, res) {
-//     res.send('something here');
-// });
-
 app.post('/api/notes', function(req, res) {
+    if (err){
+        throw err;
+    }
     console.log(req.body)
-    fs.appendFileSync(path, req.body);
-    res.json(true);
+    fs.appendFileSync(dbJson, JSON.stringify(req.body));
+    res.json(req.body);
 });
 
 // app.delete('/api/notes/', function(req, res) {
 //     res.send("Here we point to a function to DELETE the specified note");
 // });
-
-};
+}
