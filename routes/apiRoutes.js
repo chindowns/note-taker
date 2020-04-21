@@ -1,29 +1,53 @@
 const fs = require('fs');
 var dbJson = "./db/db.json";
-var Notes = require('./dbRoutes')
 
 module.exports = (app) => {
-
+    let notes = [];
 app.get('/api/notes', (req, res) => {
     fs.readFile(dbJson, 'utf8', (err, data) => {
-        if (err) {
-            throw err;
-        }
-        var notes = JSON.parse(data).map;
+        if (err) throw err;
+
+        let note={};
+        notes = [];
+        let notesParsed = JSON.parse(data);
+
+        for (let i = 0 ; i < notesParsed.length; i++) {
+            // note[i]=notesParsed[i];  
+            note = notesParsed[i];
+            note.id = i;
+            notes.push(note);
+        };
+        // notesParsed.map((note,index) => {
+        //     note[index] = notesParsed[index];
+        //     notes.push(note);
+        // });
+        
+        console.log(notes);
         res.json(notes);
+        });
+    
+    // function response(arr){
+    //     res.json(notes);
+    // }
+    
 });
-});
+
 
 app.post('/api/notes', function(req, res) {
-    if (err){
-        throw err;
-    }
-    console.log(req.body)
-    fs.appendFileSync(dbJson, JSON.stringify(req.body));
-    res.json(req.body);
+
+    notes.push(req.body);
+    // console.log(notes)
+    fs.writeFileSync(dbJson, JSON.stringify(notes));
+    res.json(notes);
+    
 });
 
-// app.delete('/api/notes/', function(req, res) {
-//     res.send("Here we point to a function to DELETE the specified note");
+// app.delete('/api/notes/:id', function(req, res) {
+//     notes.splice(req.params.id,1);
+//     fs.writeFileSync(dbJson, JSON.stringify(notes));
+
+
 // });
+
+// Module.Exports END OF FUNCTION
 }
