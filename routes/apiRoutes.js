@@ -17,21 +17,11 @@ app.get('/api/notes', (req, res) => {
             note.id = i;
             notes.push(note);
         };
-        // notesParsed.map((note,index) => {
-        //     note[index] = notesParsed[index];
-        //     notes.push(note);
-        // });
-        
+     
         console.log(notes);
         res.json(notes);
-        });
-    
-    // function response(arr){
-    //     res.json(notes);
-    // }
-    
+        });    
 });
-
 
 app.post('/api/notes', function(req, res) {
 
